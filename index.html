@@ -1,0 +1,509 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2020-03-30 月 23:17 -->
+<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta  name="viewport" content="width=device-width, initial-scale=1" />
+<title>Yet Another Org-mode Presentation Script</title>
+<meta  name="generator" content="Org-mode" />
+<meta  name="author" content="Masataro Asai" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  pre.src-sh:before    { content: 'sh'; }
+  pre.src-bash:before  { content: 'sh'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-R:before     { content: 'R'; }
+  pre.src-perl:before  { content: 'Perl'; }
+  pre.src-java:before  { content: 'Java'; }
+  pre.src-sql:before   { content: 'SQL'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  /*]]>*/-->
+</style>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="css/layout.css" />
+<link rel="stylesheet" type="text/css" href="css/default.css" />
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/jquery.loupe.min.js"></script>
+<script type="text/javascript" src="js/jgestures/jgestures.min.js"></script>
+<script type="text/javascript" src="js/code.js"></script>
+<script type="text/javascript" src="MathJax/MathJax.js"></script>
+<script type="text/javascript" src="js/mathjaxconf.js"></script>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">Yet Another Org-mode Presentation Script</h1>
+<div class="outline-text-1">
+<div class="org-center">
+<p>
+組み合わせ問題をソルバを書かずに <del>説いてみる</del> 解きたい&#x2026;
+</p>
+</div>
+
+<div class="note">
+<div class="alignright">
+<p>
+Made by guicho2.71828 (Masataro Asai)
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<div id="outline-container-orgheadline6" class="outline-2">
+<h2 id="orgheadline6"><span class="section-number-2">1</span> 課題</h2>
+<div class="outline-text-2" id="text-1">
+<ul class="org-ul">
+<li>難しい組み合わせ論的/制約充足/最適化問題がたくさんある
+<ul class="org-ul">
+<li>SAT &#x2013; CNF式を充足可能な変数割当は存在するか?</li>
+<li>IP/LP (整数/線形計画問題) &#x2013; 線形不等式を与えられたとき、ある値を最小化する割当を見つけよ</li>
+<li>CSP &#x2013; 高級な制約言語で問題を表現し、制約を満たす変数割当を探す</li>
+<li>SMT &#x2013; CSPと似ている: SATに加えてIP/LPのような不等式も表現可能</li>
+<li>Prolog</li>
+</ul></li>
+<li>これらの問題はおおまかに言って Operations Reseach や 定理証明のサブ分野になっている</li>
+<li>これらを便利に、 <b>毎朝コーヒーを沸かすのと同じぐらい簡単に</b> lisperに自然な形で使えるようにしたい</li>
+</ul>
+</div>
+
+<div id="outline-container-orgheadline1" class="outline-3">
+<h3 id="orgheadline1"><span class="section-number-3">1.1</span> SATソルバ</h3>
+<div class="outline-text-3" id="text-1-1">
+<ul class="org-ul">
+<li>毎年ある <b>コンペティション</b> でずんずん性能が上がる</li>
+<li>SATソルバの専門家/研究者でないとこれに太刀打ちするのは無理!</li>
+</ul>
+
+<p>
+入力: CNF式 (Conjunctive Normal Form)
+</p>
+
+<p>
+例: A ∧ (A ∨ ¬B ∨ C) ∧ D
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgheadline2" class="outline-3">
+<h3 id="orgheadline2"><span class="section-number-3">1.2</span> IP/LP ソルバ</h3>
+<div class="outline-text-3" id="text-1-2">
+<p>
+商業ソルバが とてつもなく早い (Gurobi / ILOG CPLEX)
+</p>
+
+<p>
+オープンソースソルバはとても遅い (LP<sub>SOLVEなど</sub>)
+</p>
+
+<p>
+それでも柔軟に切り替えたい (本番は商業ソルバで…)
+</p>
+
+<p>
+minimize   x + y
+</p>
+
+<p>
+subject to 0 &lt; x &lt; 3, y + 2x &lt; 5
+</p>
+
+<p>
+IP (Integer Programming / 整数計画) は 変数が <b>整数</b>, 問題を解くのはNP完全
+</p>
+
+<p>
+LP (Linear Programming / 線形計画) は 変数が <b>実数</b>, 問題を解くのはP完全
+</p>
+
+<p>
+MILP : 一部が整数の問題。
+</p>
+
+<p>
+IP の問題を LP の問題として解くと、 IPの最適解の上界 が得られる ← <b>線形緩和問題</b>
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgheadline3" class="outline-3">
+<h3 id="orgheadline3"><span class="section-number-3">1.3</span> CSP (Constraing Satisfaction Problem) ソルバ</h3>
+<div class="outline-text-3" id="text-1-3">
+<p>
+SAT と同じくコンペティションがある
+</p>
+
+<p>
+Minizinc という高級言語で記述 → <b>flatzinc</b> という簡単な言語に変換 → 様々なソルバ
+</p>
+
+<div class="org-center">
+<p>
+四色問題
+</p>
+</div>
+
+<div class="container-fluid">
+<div class="row-fluid">
+<div class="span6">
+<div class="org-src-container">
+
+<pre class="src src-lisp">% Colouring Australia using nc colours
+int: nc = 3<span style="color: #b22222;">;</span>
+var 1..nc: wa<span style="color: #b22222;">;</span>
+var 1..nc: nt<span style="color: #b22222;">;</span>
+var 1..nc: sa<span style="color: #b22222;">;</span>
+var 1..nc: nsw<span style="color: #b22222;">;</span>
+var 1..nc: v<span style="color: #b22222;">;</span>
+var 1..nc: t<span style="color: #b22222;">;</span>
+var 1..nc: q<span style="color: #b22222;">;</span>
+constraint wa != nt<span style="color: #b22222;">;</span>
+constraint wa != sa<span style="color: #b22222;">;</span>
+constraint nt != sa<span style="color: #b22222;">;</span>
+constraint nt != q<span style="color: #b22222;">;</span>
+constraint sa != q<span style="color: #b22222;">;</span>
+constraint sa != nsw<span style="color: #b22222;">;</span>
+constraint sa != v<span style="color: #b22222;">;</span>
+constraint q != nsw<span style="color: #b22222;">;</span>
+constraint nsw != v<span style="color: #b22222;">;</span>
+solve satisfy<span style="color: #b22222;">;</span>
+output [<span style="color: #8b2252;">"wa="</span>, show(wa), <span style="color: #8b2252;">"\t nt="</span>, show(nt),
+<span style="color: #8b2252;">"\t sa="</span>, show(sa), <span style="color: #8b2252;">"\n"</span>, <span style="color: #8b2252;">"q="</span>, show(q),
+<span style="color: #8b2252;">"\t nsw="</span>, show(nsw), <span style="color: #8b2252;">"\t v="</span>, show(v), <span style="color: #8b2252;">"\n"</span>,
+<span style="color: #8b2252;">"t="</span>, show(t), <span style="color: #8b2252;">"\n"</span>]<span style="color: #b22222;">;</span>
+</pre>
+</div>
+
+</div>
+<div class="span6">
+<p>
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+</div>
+</div>
+<div id="outline-container-orgheadline4" class="outline-3">
+<h3 id="orgheadline4"><span class="section-number-3">1.4</span> SMTソルバ</h3>
+<div class="outline-text-3" id="text-1-4">
+<p>
+SATソルバと制約ソルバを交互に入れ替えて、制約を満たす解が存在するかを調べる
+</p>
+
+<p>
+制約を記述する論理を「Theory」 「Logic」 というかたちで拡張可能
+</p>
+
+<p>
+例: QF<sub>LIA</sub> = Quantifier Free Linear Integer Arithmetic = SAT + IP みたいな感じ
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-lisp">(set-option <span style="color: #483d8b;">:produce-models</span> true)
+(set-logic QF_LIA)
+(declare-fun x () Int)
+(declare-fun y () Int)
+(declare-fun z () Int)
+(<span style="color: #ff0000; font-weight: bold;">assert</span> (and (or
+              (&lt;= (+ x 3) (* 2 y))
+              (&gt;= (+ x 4) z))))
+(check-sat)
+(get-model)
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgheadline5" class="outline-3">
+<h3 id="orgheadline5"><span class="section-number-3">1.5</span> Prolog</h3>
+<div class="outline-text-3" id="text-1-5">
+<p>
+いわずもがな、一階述語論理で記述した項を満たす変数割当を列挙
+</p>
+</div>
+</div>
+</div>
+
+
+
+<div id="outline-container-orgheadline7" class="outline-2">
+<h2 id="orgheadline7"><span class="section-number-2">2</span> Lispから便利にこれらの問題を解くには?</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+例: 4色問題を解きたい
+</p>
+
+<ul class="org-ul">
+<li>Programming OR Approach
+<ul class="org-ul">
+<li><b>Lisp でソルバを書いたら早いし速い!</b> 自前実装のアプローチ
+<ul class="org-ul">
+<li>もしかしたら、解きたい問題に対してベストなアルゴリズムを考えられるかもしれない</li>
+</ul></li>
+</ul></li>
+<li>しかし、 <b>ソルバを書きたくない</b>
+<ul class="org-ul">
+<li>実装時間を減らしたい</li>
+<li><b>コンテストなどで性能のお墨付きがあるソルバで</b> 解きたい</li>
+</ul></li>
+<li><b>Modelling OR Approach</b>
+<ul class="org-ul">
+<li>既存の問題を 上記の制約充足/最適化言語に <b>変換して</b> (Modelling) 解く
+<ul class="org-ul">
+<li>SATはNP完全 → 多くの問題はSATのCNF式に変換できる</li>
+<li>速いソルバがある</li>
+</ul></li>
+</ul></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgheadline9" class="outline-2">
+<h2 id="orgheadline9"><span class="section-number-2">3</span> TRIVIAL-PACKAGE-MANAGER</h2>
+<div class="outline-text-2" id="text-3">
+<ul class="org-ul">
+<li>ソルバをインストールするにはたくさん依存関係がある</li>
+<li>quicklispからapt-get呼べない</li>
+<li>呼べばよくね？</li>
+</ul>
+
+<div class="org-src-container">
+
+<pre class="src src-lisp">Package trivial-package-manager (nicknamed as tpm):
+
+browse-package (query-string)
+
+ensure-program (program <span style="color: #228b22;">&amp;key</span> apt dnf yum pacman yaourt brew macports fink choco from-source env-alist)
+ensure-library (library <span style="color: #228b22;">&amp;key</span> apt dnf yum pacman yaourt brew macports fink choco from-source env-alist)
+do-install             (<span style="color: #228b22;">&amp;key</span> apt dnf yum pacman yaourt brew macports fink choco from-source)
+
+  PROGRAM is a program name (string) to be checked by `which` command.
+  LIBRARY is a library name (string) to be checked by `pkg-config` command. Includes <span style="color: #8b2252;">"lib"</span> i.e. libcurl.
+</pre>
+</div>
+
+<ul class="org-ul">
+<li>gksudo や sudo が適宜選択</li>
+<li><code>&lt;user&gt;/&lt;repo&gt;/&lt;pkg&gt;</code> で add-apt-repository や brew tap も実行する</li>
+</ul>
+</div>
+
+<div id="outline-container-orgheadline8" class="outline-3">
+<h3 id="orgheadline8"><span class="section-number-3">3.1</span> 例</h3>
+<div class="outline-text-3" id="text-3-1">
+<div class="org-src-container">
+
+<pre class="src src-lisp">(defsystem cl-sat.minisat
+  <span style="color: #483d8b;">:version</span> <span style="color: #8b2252;">"0.1"</span>
+   ...
+  <span style="color: #483d8b;">:defsystem-depends-on</span> (<span style="color: #483d8b;">:trivial-package-manager</span>)
+  <span style="color: #483d8b;">:perform</span>
+  (load-op <span style="color: #483d8b;">:before</span> (op c)
+           (uiop:symbol-call <span style="color: #483d8b;">:trivial-package-manager</span>
+                             <span style="color: #483d8b;">:ensure-program</span>
+                             <span style="color: #8b2252;">"minisat"</span>
+                             <span style="color: #483d8b;">:apt</span> <span style="color: #8b2252;">"minisat"</span>
+                             <span style="color: #483d8b;">:dnf</span> <span style="color: #8b2252;">"minisat2"</span>
+                             <span style="color: #483d8b;">:yum</span> <span style="color: #8b2252;">"minisat2"</span>
+                             <span style="color: #483d8b;">:brew</span> <span style="color: #8b2252;">"minisat"</span>
+                             <span style="color: #483d8b;">:from-source</span> (format nil <span style="color: #8b2252;">"make -C ~a"</span>
+                                                  (asdf:system-source-directory <span style="color: #483d8b;">:cl-sat.minisat</span>)))))
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgheadline10" class="outline-2">
+<h2 id="orgheadline10"><span class="section-number-2">4</span> SAT &#x2013; CL-SAT</h2>
+<div class="outline-text-2" id="text-4">
+<div class="org-src-container">
+
+<pre class="src src-lisp">(ql:quickload <span style="color: #483d8b;">:cl-sat.minisat</span>)
+(solve '(and (or a !b c) d) <span style="color: #483d8b;">:minisat</span>)
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgheadline11" class="outline-2">
+<h2 id="orgheadline11"><span class="section-number-2">5</span> SMT &#x2013; CL-SMT</h2>
+<div class="outline-text-2" id="text-5">
+<div class="org-src-container">
+
+<pre class="src src-lisp">(ql:quickload <span style="color: #483d8b;">:cl-smt.cvc4</span>)
+(solve '((set-option <span style="color: #483d8b;">:produce-models</span> true)
+         (set-logic ^QF_LIA)
+         (declare-fun x () |Int|)
+         (declare-fun y () |Int|)
+         (declare-fun z () |Int|)
+         (<span style="color: #ff0000; font-weight: bold;">assert</span> (and (or
+                       (&lt;= (+ x 3) (* 2 y))
+                       (&gt;= (+ x 4) z))))
+         (check-sat)
+         (get-model))
+       <span style="color: #483d8b;">:cvc4</span>
+       <span style="color: #483d8b;">:debug</span> t)
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgheadline12" class="outline-2">
+<h2 id="orgheadline12"><span class="section-number-2">6</span> Prolog &#x2013; CL-PROLOG</h2>
+<div class="outline-text-2" id="text-6">
+<div class="org-src-container">
+
+<pre class="src src-lisp">(= 6
+   (read-from-string
+    (print
+     (run-prolog `((factorial 0 1)
+                   (<span style="color: #483d8b;">:-</span> (factorial ?n ?f)
+                       (and (&gt; ?n 0)
+                            (is ?n1 (- ?n 1))
+                            (factorial ?n1 ?f1)
+                            (is ?f (* ?n ?f1))))
+                   (<span style="color: #483d8b;">:-</span> main
+                       (factorial 3 ?w)
+                       (write_canonical ?w))
+                   (<span style="color: #483d8b;">:-</span> (initialization main)))
+                 <span style="color: #483d8b;">:swi</span>))))
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Masataro Asai</p>
+<p class="date">Created: 2020-03-30 月 23:17</p>
+<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>

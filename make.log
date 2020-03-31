@@ -1,0 +1,28 @@
+make[1]: 警告: 副次 make で -jN を強制指定しました: jobserver モードを無効にします.
+make[1]: ディレクトリ '/home/guicho/repos/presentations/2017-12-16' に入ります
+make -C img
+make -C css
+make[2]: ディレクトリ '/home/guicho/repos/presentations/2017-12-16/css' に入ります
+sass --update .
+make[2]: ディレクトリ '/home/guicho/repos/presentations/2017-12-16/img' に入ります
+make[2]: 'all' に対して行うべき事はありません.
+make[2]: ディレクトリ '/home/guicho/repos/presentations/2017-12-16/img' から出ます
+make -C scripts
+make[2]: ディレクトリ '/home/guicho/repos/presentations/2017-12-16/scripts' に入ります
+Q --batch  -f batch-byte-compile compile-org-html.el
+make[2]: Q: コマンドが見つかりませんでした
+Makefile:5: ターゲット 'compile-org-html.elc' のレシピで失敗しました
+make[2]: [compile-org-html.elc] エラー 127 (無視されました)
+Q --batch  -f batch-byte-compile compile-org-latex.el
+make[2]: Q: コマンドが見つかりませんでした
+Makefile:5: ターゲット 'compile-org-latex.elc' のレシピで失敗しました
+make[2]: [compile-org-latex.elc] エラー 127 (無視されました)
+make[2]: ディレクトリ '/home/guicho/repos/presentations/2017-12-16/scripts' から出ます
+scripts/org-html.sh presen.org presen.org.html
+Loading /home/guicho/repos/presentations/2017-12-16/scripts/compile-org-html.el (source)...
+make[2]: ディレクトリ '/home/guicho/repos/presentations/2017-12-16/css' から出ます
+Org-mode version 8.3.6 (8.3.6-dist @ /home/guicho/repos/presentations/2017-12-16/org-mode/lisp/)
+No language for src block: (unnamed)
+Makefile:25: ターゲット 'presen.org.html' のレシピで失敗しました
+make[1]: *** [presen.org.html] エラー 255
+make[1]: ディレクトリ '/home/guicho/repos/presentations/2017-12-16' から出ます
