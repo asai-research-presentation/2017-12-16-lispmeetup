@@ -8,14 +8,8 @@
 #+LINK: sjpg file:img/static/%s.jpg
 
 #+begin_outline-text-1
-#+begin_xlarge
 #+begin_center
-To Start Press "n"
-#+end_center
-#+end_xlarge
-
-#+begin_center
-*WARN* Turn off your custom keyboard shortcuts
+組み合わせ問題をソルバを書かずに +説いてみる+ 解きたい...
 #+end_center
 
 #+begin_note
@@ -25,313 +19,214 @@ Made by guicho2.71828 (Masataro Asai)
 #+end_note
 #+end_outline-text-1
 
-* What Is It?
+* 課題
 
-#+begin_xlarge
-An Alternative to
++ 難しい組み合わせ論的/制約充足/最適化問題がたくさんある
+  + SAT -- CNF式を充足可能な変数割当は存在するか?
+  + IP/LP (整数/線形計画問題) -- 線形不等式を与えられたとき、ある値を最小化する割当を見つけよ
+  + CSP -- 高級な制約言語で問題を表現し、制約を満たす変数割当を探す
+  + SMT -- CSPと似ている: SATに加えてIP/LPのような不等式も表現可能
+  + Prolog
++ これらの問題はおおまかに言って Operations Reseach や 定理証明のサブ分野になっている
++ これらを便利に、 *毎朝コーヒーを沸かすのと同じぐらい簡単に* lisperに自然な形で使えるようにしたい
+
+** SATソルバ
+
++ 毎年ある *コンペティション* でずんずん性能が上がる
++ SATソルバの専門家/研究者でないとこれに太刀打ちするのは無理!
+
+入力: CNF式 (Conjunctive Normal Form)
+
+例: A ∧ (A ∨ ¬B ∨ C) ∧ D
+
+** IP/LP ソルバ
+
+商業ソルバが とてつもなく早い (Gurobi / ILOG CPLEX)
+
+オープンソースソルバはとても遅い (LP_SOLVEなど)
+
+それでも柔軟に切り替えたい (本番は商業ソルバで…)
+
+minimize   x + y
+
+subject to 0 < x < 3, y + 2x < 5
+
+IP (Integer Programming / 整数計画) は 変数が *整数*, 問題を解くのはNP完全
+
+LP (Linear Programming / 線形計画) は 変数が *実数*, 問題を解くのはP完全
+
+MILP : 一部が整数の問題。
+
+IP の問題を LP の問題として解くと、 IPの最適解の上界 が得られる ← *線形緩和問題*
+
+** CSP (Constraing Satisfaction Problem) ソルバ
+
+SAT と同じくコンペティションがある
+
+Minizinc という高級言語で記述 → *flatzinc* という簡単な言語に変換 → 様々なソルバ
+
 #+begin_center
-Org-based Presentation
+四色問題
 #+end_center
-#+begin_alignright
-Method
-#+end_alignright
-#+end_xlarge
-
-#+begin_center
-Proceed with "n"
-#+end_center
-
-* Usage (on browsers)
-
-#+begin_smaller
-
-#+begin_container-fluid
-#+begin_row-fluid
-#+begin_span6
-+ n,<Space> :: go to the next slide/expand a list
-+ p :: back to the previous slide
-+ u, ^ :: go to the parent section
-+ N :: expand all list in the current slide
-#+end_span6
-#+begin_span6
-+ s, or typing "go" :: jump to an arbitrary section (using minibuffer)
-+ d :: debugging mode (shows content border)
-+ <Ctrl-g> or <Esc> :: cancel current key strokes
-+ typing "help" :: show available commands in the minibuffer!
-#+end_span6
-#+end_row-fluid
-#+end_container-fluid
-
-#+end_smaller
-
-* Usage (on emacs)
-
-1. clone [[https://github.com/guicho271828/another-org-info][our repo]]
-
-2. =make html= to publish
-
-3. show it on your browser!
-
-* Virtue
-
-+ Simplicity
-  + =code.js= is a pure javascript, only has 200 lines (increasing as new features
-    are added)
-+ Extensibility
-  + you can write your own extension and its easy
-  + set a function to =keyManager.<your-key-strokes>=
-  + the key strokes should contain character $c$ within char code $32 < c < 126$
-    + =Space,!,",...A,B,C,...x,y,z,{,|,~=
-+ LICENSE
-  + GPLv3 ?? < not attatched a license yet
-
-* Example: Expanding a List
-
-+ *the dots* tell "/this is a content/"
-+ list
-+ list
-* Dependencies
-<<dependency>>
-
-+ jQuery (included)
-+ Inkscape (image conversion)
-+ org-mode (included)
-+ MathJax (optional submodule)
-
-* LaTeX output
-
-+ [[file:presen.pdf][PDF Presentaiton]] presen.pdf -- presentation in pdf with similar
-  appearance. Useful when browser-based presentation is not allowed
-+ [[file:resume.pdf][Printable Resume]] resume.pdf -- short and printed version.
-+ =make pdf= and =make resume= on the shell
-+ need the latest $\mbox{\TeX}$ live installation
-  + see =Makefile=
-  + =platex= and =dvipdfmx=
-  + alternatively, =pdflatex=
-
-* Code block / highlightation
-
 
 #+begin_container-fluid
 #+begin_row-fluid
 #+begin_span6
 #+begin_src lisp
-(defun factorial (n)
-  (if (zerop n)
-      1
-      (* n (factorial (1- n)))))
+% Colouring Australia using nc colours
+int: nc = 3;
+var 1..nc: wa;
+var 1..nc: nt;
+var 1..nc: sa;
+var 1..nc: nsw;
+var 1..nc: v;
+var 1..nc: t;
+var 1..nc: q;
+constraint wa != nt;
+constraint wa != sa;
+constraint nt != sa;
+constraint nt != q;
+constraint sa != q;
+constraint sa != nsw;
+constraint sa != v;
+constraint q != nsw;
+constraint nsw != v;
+solve satisfy;
+output ["wa=", show(wa), "\t nt=", show(nt),
+"\t sa=", show(sa), "\n", "q=", show(q),
+"\t nsw=", show(nsw), "\t v=", show(v), "\n",
+"t=", show(t), "\n"];
 #+end_src
 #+end_span6
 #+begin_span6
-#+begin_src python
-import numpy as np
-def unit(i):
-    x = np.zeros([i,i])
-    for i in range(i):
-        x[i][i] = 1
-    return x
+
+#+end_span6
+#+end_row-fluid
+#+end_container-fluid
+** SMTソルバ
+
+SATソルバと制約ソルバを交互に入れ替えて、制約を満たす解が存在するかを調べる
+
+制約を記述する論理を「Theory」 「Logic」 というかたちで拡張可能
+
+例: QF_LIA = Quantifier Free Linear Integer Arithmetic = SAT + IP みたいな感じ
+
+#+begin_src lisp
+(set-option :produce-models true)
+(set-logic QF_LIA)
+(declare-fun x () Int)
+(declare-fun y () Int)
+(declare-fun z () Int)
+(assert (and (or
+              (<= (+ x 3) (* 2 y))
+              (>= (+ x 4) z))))
+(check-sat)
+(get-model)
 #+end_src
-#+end_span6
-#+end_row-fluid
-#+end_container-fluid
+
+** Prolog
+
+いわずもがな、一階述語論理で記述した項を満たす変数割当を列挙
 
 
-* Images
 
-+ Put images into =img/= directory.
-+ svg files are converted into png.
-  + We recommend it because
-    1. In html presentation, the inserted svg images capture the keyboard and mouse event
-       and the presentation sometimes does not work right.
-    2. In resume output and pdf presentation, the =svg= and =svg-inkscape= package is a
-       bit buggy and I personally failed make it work.
-+ svg-png conversion is done by =inkscape=
-  + but you can also use ImageMagick =convert= command.
-  + See =img/Makefile= for more information.
+* Lispから便利にこれらの問題を解くには?
 
-* Org-block templates
+例: 4色問題を解きたい
 
-We mark the html tag with org-mode blocks such as =#+BEGIN_EXAMPLE=.
-Using [[http://orgmode.org/manual/Easy-Templates.html][block template]] (by modifying =org-structure-template-alist=),
-you can quickly write such blocks i.e.:
++ Programming OR Approach
+  + *Lisp でソルバを書いたら早いし速い!* 自前実装のアプローチ
+    + もしかしたら、解きたい問題に対してベストなアルゴリズムを考えられるかもしれない
++ しかし、 *ソルバを書きたくない*
+  + 実装時間を減らしたい
+  + *コンテストなどで性能のお墨付きがあるソルバで* 解きたい
++ *Modelling OR Approach*
+  + 既存の問題を 上記の制約充足/最適化言語に *変換して* (Modelling) 解く
+    + SATはNP完全 → 多くの問題はSATのCNF式に変換できる
+    + 速いソルバがある
 
-#+begin_example
-at the beginning of line, hit
+* TRIVIAL-PACKAGE-MANAGER
 
-<s<tab>
++ ソルバをインストールするにはたくさん依存関係がある
++ quicklispからapt-get呼べない
++ 呼べばよくね？
 
-in normal org-mode destribution in emacs,
-it would expand into:
+#+begin_src lisp
+    Package trivial-package-manager (nicknamed as tpm):
+    
+    browse-package (query-string)
+    
+    ensure-program (program &key apt dnf yum pacman yaourt brew macports fink choco from-source env-alist)
+    ensure-library (library &key apt dnf yum pacman yaourt brew macports fink choco from-source env-alist)
+    do-install             (&key apt dnf yum pacman yaourt brew macports fink choco from-source)
 
-#+begin_src 
-
+      PROGRAM is a program name (string) to be checked by `which` command.
+      LIBRARY is a library name (string) to be checked by `pkg-config` command. Includes "lib" i.e. libcurl.
 #+end_src
-#+end_example
 
-** customizing templates
++ gksudo や sudo が適宜選択
++ =<user>/<repo>/<pkg>= で add-apt-repository や brew tap も実行する
 
-We provide custom =org-structure-template-alist=.
-These blocks are recognized by the stylesheet we provide,
-so they are highlighted correctly.
+** 例
 
-#+begin_container-fluid
-#+begin_row-fluid
-#+begin_span6
-+ <S -- smaller
-+ <lar -- larger
-+ <t -- twocolumn
-+ <n -- footnote
-+ <r -- float right
-+ <ar -- align right
-+ <lcr -- "left,center,right" format with x-large fonts
-+ <E -- latex `equation' environment
-+ still more...
-#+end_span6
-#+begin_span6
-copy-paste it
-to your =.emacs=
+#+begin_src lisp
+(defsystem cl-sat.minisat
+  :version "0.1"
+   ...
+  :defsystem-depends-on (:trivial-package-manager)
+  :perform
+  (load-op :before (op c)
+           (uiop:symbol-call :trivial-package-manager
+                             :ensure-program
+                             "minisat"
+                             :apt "minisat"
+                             :dnf "minisat2"
+                             :yum "minisat2"
+                             :brew "minisat"
+                             :from-source (format nil "make -C ~a"
+                                                  (asdf:system-source-directory :cl-sat.minisat)))))
+#+end_src
 
-#+begin_center
-[[file:config.el]]
-#+end_center
+* SAT -- CL-SAT
 
-#+end_span6
-#+end_row-fluid
-#+end_container-fluid
+#+begin_src lisp
+(ql:quickload :cl-sat.minisat)
+(solve '(and (or a !b c) d) :minisat)
+#+end_src
 
-* Utility
+* DONE SMT -- CL-SMT
 
-+ ./make-periotically.sh [args]
-  + Watches the changes in the directory and =make=
-  + Build statuses are notified in inotify pop-up
-  + all arguments are passed to =make=
-  + dependency : inotifywait, notify-send
+#+begin_src lisp
+(ql:quickload :cl-smt.cvc4)
+(solve '((set-option :produce-models true)
+         (set-logic ^QF_LIA)
+         (declare-fun x () |Int|)
+         (declare-fun y () |Int|)
+         (declare-fun z () |Int|)
+         (assert (and (or
+                       (<= (+ x 3) (* 2 y))
+                       (>= (+ x 4) z))))
+         (check-sat)
+         (get-model))
+       :cvc4
+       :debug t)
+#+end_src
 
-* Makefile Targets
+* Prolog -- CL-PROLOG
 
-+ =make html= -- builds the html version
-+ =make resume= -- builds the resume version
-+ =make pdf= -- builds the pdf version
-+ =make= -- build all
-
-* Test
-
-+ [[http://www.google.com][Link]]
-+ This
-+ Is
-+ A Test
-
-Mathjax formula:
-
-\[
- E=mc^2
-\]
-
-\begin{equation}
- E=mc^2 + \frac{1}{2} mv^2
-\end{equation}
-
-** Twocolumn Test
-
-#+begin_container-fluid
-#+begin_row-fluid
-#+begin_span6
-+ HOOA!
-+ *HOOA!*
-+ HOOA!
-#+end_span6
-#+begin_span6
-This is a LISP ALIEN IN A CAGE!
-
-[[png:alien]]
-
-#+end_span6
-#+end_row-fluid
-#+end_container-fluid
-
-
-** many columns test
-
-
-#+begin_container-fluid
-#+begin_row-fluid
-#+begin_span3
- a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a
-#+end_span3
-#+begin_span3
- b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b
-#+end_span3
-#+begin_span3
- c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c
-#+end_span3
-#+begin_span3
- d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d
-#+end_span3
-#+end_row-fluid
-#+end_container-fluid
-
-* A Slide with Too Little Contents
-
-#+begin_center
-#+begin_smaller
-Hi, I'm small!
-#+end_smaller
-#+end_center
-
-#+begin_note
-See the headline is correctly adjusted
-#+end_note
-
-* Left-Center-Right template
-
-#+begin_xlarge
-x-large left
-#+begin_center
-centered
-#+end_center
-#+begin_alignright
-right
-#+end_alignright
-#+end_xlarge
-
-#+begin_note
-This is a footnote
-#+end_note
-
-* TODOs
-
-#+begin_container-fluid
-#+begin_row-fluid
-#+begin_span6
-#+begin_smaller
-+ Features
-  + Table of contents
-  + +=<dl>= does not expand+ *DONE*
-  + +Showing current keystrokes+ *DONE*
-  + auto-scroll/auto-zoom with big contents
-  + Showing current/total page number
-  + +Changing Stylesheet+ *DONE*. "style"
-  + +Up-Section command+ *DONE*. "u"
-  + Slide thumbnail
-  + +stopwatch/countdown timer+ *DONE*. "timer"
-  + +link to #section+ *DONE*.
-    #+HTML: <a href="index.html#6">sample link</a>
-#+end_smaller
-#+end_span6
-#+begin_span6
-#+begin_smaller
-+ Features inspired by other tools
-  + Content Search (in org-infojs)
-  + Drawing mode (in [[http://code.google.com/p/jessyink/][jessyink]])
-  + 'Paused' mode (in [[http://lab.hakim.se/reveal-js/][reveal.js]])
-  + +Export to PDF (also in reveal.js)+ *DONE*
-  + +resume output+ *DONE*
-  + Slide with an image covering the entire background (slideshare)
-  + present one paragraph/word/letter at a time
-    + those in [[http://docutils.sourceforge.net/docs/user/slide-shows.s5.html][s5]]
-  + "C-M-x" style notation in the command definition
-#+end_smaller
-#+end_span6
-
-#+end_row-fluid
-#+end_container-fluid
+#+begin_src lisp
+(= 6
+   (read-from-string
+    (print
+     (run-prolog `((factorial 0 1)
+                   (:- (factorial ?n ?f)
+                       (and (> ?n 0)
+                            (is ?n1 (- ?n 1))
+                            (factorial ?n1 ?f1)
+                            (is ?f (* ?n ?f1))))
+                   (:- main
+                       (factorial 3 ?w)
+                       (write_canonical ?w))
+                   (:- (initialization main)))
+                 :swi))))
+#+end_src
